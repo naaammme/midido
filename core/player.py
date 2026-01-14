@@ -60,7 +60,7 @@ class MidiPlayer(QThread):
 
             if not self._active: return
 
-            self.on_progress.emit("▶ 演奏开始 (后台高精模式)")
+            self.on_progress.emit("▶ 演奏开始 ")
 
             mid = mido.MidiFile(self.midi_file)
 

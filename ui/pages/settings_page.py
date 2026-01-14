@@ -39,15 +39,15 @@ class SettingsPage(ScrollArea):
 
         # 外观配置
         t_group = SettingCardGroup("外观", self.view)
-        self.card_theme = DropdownSettingCard(FluentIcon.BRUSH, "主题", "", ["自动", "浅色", "深色"], t_group)
+        self.card_theme = DropdownSettingCard(FluentIcon.BRUSH, "主题", "", ["跟随系统", "浅色", "深色"], t_group)
         self.card_theme.comboBox.currentIndexChanged.connect(self.set_theme)
 
-        default_color = QColor(self.conf.value("theme_color", "#009faa")) if self.conf else QColor("#009faa")
+        default_color = QColor(self.conf.value("theme_color", "#808000")) if self.conf else QColor("#808000")
         setThemeColor(default_color)
         self.card_color = ColorSettingCard(FluentIcon.PALETTE, "主题颜色", "", default_color, t_group)
         self.card_color.colorButton.colorChanged.connect(self.set_theme_color)
 
-        t_group.addSettingCard(self.card_theme)
+        t_group.addSettingCard(self.card_theme) 
         t_group.addSettingCard(self.card_color)
         self.layout.addWidget(t_group)
 
