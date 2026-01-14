@@ -1,0 +1,5 @@
+mido
+python-rtmidi
+PyQt6
+PyQt6-Fluent-Widgets
+keyboard
