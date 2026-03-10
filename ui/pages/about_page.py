@@ -9,7 +9,7 @@ from qfluentwidgets import (
     IndeterminateProgressRing
 )
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 GITHUB_REPO = "naaammme/midido"
 QQ_GROUP_URL = "https://qm.qq.com/cgi-bin/qm/qr?k=LcBVvZdH05AILOPso4QSAEM6bbtj3qsI&jump_from=webapi&authKey=Nyna4+DSJGk/+Am6cLzQKsedbyeHUf3MU68Ik+C6nIgz50NEya5lAu+aZi3cM8XT"
 
