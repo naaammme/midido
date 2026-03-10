@@ -14,7 +14,7 @@ from profiles.harp import HarpProfile
 class MainWindow(FluentWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("MidiDo-自动演奏]")
+        self.setWindowTitle("MidiDo-自动演奏")
         self.resize(950, 650)
         self.move(self.screen().availableGeometry().center() - self.rect().center())
 

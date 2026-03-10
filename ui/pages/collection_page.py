@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QListWidgetItem, 
 from qfluentwidgets import (
     ScrollArea, BodyLabel, SubtitleLabel, StrongBodyLabel,
     PrimaryPushButton, PushButton, FluentIcon, CardWidget,
-    IndeterminateProgressRing, ListWidget
+    IndeterminateProgressRing, ListWidget, SearchLineEdit, ComboBox
 )
 
 from ui.components import SongCard
@@ -64,12 +64,25 @@ class CollectionPage(ScrollArea):
         tool_layout = QHBoxLayout()
         tool_layout.addWidget(StrongBodyLabel("收藏列表"))
         tool_layout.addStretch(1)
+
+        self.search_box = SearchLineEdit()
+        self.search_box.setPlaceholderText("搜索曲目")
+        self.search_box.setFixedWidth(200)
+        self.search_box.textChanged.connect(self.filter_list)
+
+        self.sort_box = ComboBox()
+        self.sort_box.addItems(["默认排序", "最近导入", "名称升序", "名称降序"])
+        self.sort_box.setFixedWidth(110)
+        self.sort_box.currentIndexChanged.connect(lambda: self.refresh())
+
         self.btn_del = PushButton("删除选中", self, FluentIcon.DELETE)
         self.btn_del.clicked.connect(self.delete_selected)
         self.btn_del.setEnabled(False)
         self.btn_import = PushButton("导入本地", self, FluentIcon.FOLDER)
         self.btn_import.clicked.connect(self.import_midi)
 
+        tool_layout.addWidget(self.search_box)
+        tool_layout.addWidget(self.sort_box)
         tool_layout.addWidget(self.btn_del)
         tool_layout.addWidget(self.btn_import)
         layout.addLayout(tool_layout)
@@ -83,7 +96,15 @@ class CollectionPage(ScrollArea):
 
     def refresh(self):
         self.list_widget.clear()
-        for favorite in self.data_mgr.get_favorites():
+        favorites = list(self.data_mgr.get_favorites())
+        sort_idx = self.sort_box.currentIndex()
+        if sort_idx == 1:
+            favorites.sort(key=lambda f: f.get('added_time', 0), reverse=True)
+        elif sort_idx == 2:
+            favorites.sort(key=lambda f: f['title'].lower())
+        elif sort_idx == 3:
+            favorites.sort(key=lambda f: f['title'].lower(), reverse=True)
+        for favorite in favorites:
             list_item = QListWidgetItem(self.list_widget)
             list_item.setSizeHint(QSize(0, 60))
             list_item.setData(Qt.ItemDataRole.UserRole, favorite)
@@ -93,6 +114,14 @@ class CollectionPage(ScrollArea):
             widget = SongCard(title, path)
             if not exists: widget.setStyleSheet("opacity: 0.5; color: red;")
             self.list_widget.setItemWidget(list_item, widget)
+        self.filter_list(self.search_box.text())
+
+    def filter_list(self, text):
+        text = text.strip().lower()
+        for i in range(self.list_widget.count()):
+            item = self.list_widget.item(i)
+            data = item.data(Qt.ItemDataRole.UserRole)
+            item.setHidden(bool(text) and text not in data['title'].lower() and text not in data['path'].lower())
 
     def select_song(self, list_item):
         favorite_data = list_item.data(Qt.ItemDataRole.UserRole)

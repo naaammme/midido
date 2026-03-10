@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import traceback
 from urllib import request, error
 from urllib.parse import urljoin, quote, urlsplit, urlunsplit
@@ -130,7 +131,8 @@ class DataManager(QObject):
             "path": path,
             "artist": artist,
             "type": str(type_id),
-            "upload_time": upload_time
+            "upload_time": upload_time,
+            "added_time": time.time()
         }
 
         self._favorites.append(item)

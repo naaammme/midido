@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QFrame, QLabel
 from qfluentwidgets import (
     SettingCard, ComboBox, SpinBox, DoubleSpinBox,
-    ColorPickerButton, FluentIcon, StrongBodyLabel, BodyLabel, isDarkTheme
+    ColorPickerButton, FluentIcon, StrongBodyLabel, BodyLabel, IconWidget
 )
 
 
@@ -43,9 +43,8 @@ class SongCard(QFrame):
         layout.setContentsMargins(13, 5, 10, 5)
         layout.setSpacing(10)
 
-        # 内容区域
-        icon = StrongBodyLabel()
-        icon.setPixmap(FluentIcon.MUSIC.icon().pixmap(20, 20))
+        icon = IconWidget(FluentIcon.MUSIC, self)
+        icon.setFixedSize(20, 20)
         layout.addWidget(icon)
         layout.addWidget(StrongBodyLabel(title, self))
         layout.addStretch(1)
